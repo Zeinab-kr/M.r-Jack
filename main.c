@@ -25,12 +25,12 @@ struct tiles {
     struct tiles *right;
     struct tiles *left;
 };
+struct tiles *center;
 struct data cards[9];
-struct tiles map[9];
 
 // prototypes
 void define_cards(struct data cards[]);
-void create_map(struct tiles map[], int wall[], int tile_numbers[], struct data cards[]);
+void create_map(int wall[], int tile_numbers[], struct data cards[]);
 
 int main()
 {
@@ -108,24 +108,51 @@ void define_cards(struct data cards[])
     cards[8].hourglass = 2;
 }
 
-void create_map(struct tiles map[], int wall[], int tile_numbers[], struct data cards[])
+void create_map(int wall[], int tile_numbers[], struct data cards[])
 {
-    // characters
-    for (int i = 0; i < 9; i++) {
-        strcpy(map[i].suspect, cards[tile_numbers[i]].name);
-    }
-    for (int i = 0; i < 9; i++) {
-        if (wall[i] == UP) {
-            map[i].up = NULL;
-        }
-        if (wall[i] == DOWN) {
-            map[i].down = NULL;
-        }
-        if (wall[i] == RIGHT) {
-            map[i].right = NULL;
-        }
-        if (wall[i] = LEFT) {
-            map[i].left = NULL;
-        }
-    }
+    // centric tile
+    center = (struct tiles *)malloc(sizeof(struct tiles));
+    strcpy(center->suspect, cards[tile_numbers[4]].name);
+
+    if (wall[4] != UP) {
+        center->up = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(center->up->suspect, cards[tile_numbers[1]].name);
+    } else {center->up = NULL;}
+
+    if (wall[4] != DOWN) {
+        center->down = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(center->down->suspect, cards[tile_numbers[7]].name);
+    } else {center->down = NULL;}
+
+    if (wall[4] != RIGHT) {
+        center->right = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(center->right->suspect, cards[tile_numbers[5]].name);
+    } else {center->right = NULL;}
+
+    if (wall[4] != LEFT) {
+        center->left = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(center->left->suspect, cards[tile_numbers[3]].name);
+    } else {center->left = NULL;}
+
+    // upper row
+    if (wall[1] != RIGHT) {
+        center->up->right = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(center->up->right->suspect, cards[tile_numbers[2]].name);
+    } else {center->up->right = NULL;}
+
+    if (wall[1] != LEFT) {
+        center->up->left = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(center->up->left->suspect, cards[tile_numbers[0]].name);
+    } else {center->up->right = NULL;}
+
+    // lower row
+    if (wall[7] != RIGHT) {
+        center->down->right = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(center->down->right, cards[tile_numbers[8]].name);
+    } else {center->down->right = NULL;}
+
+    if (wall[7] != LEFT) {
+        center->down->left = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(center->down->left, cards[tile_numbers[6]].name);
+    } else {center->down->left = NULL;}
 }
