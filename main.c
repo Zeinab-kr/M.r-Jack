@@ -19,7 +19,7 @@ struct data {
     int hourglass;
 };
 struct tiles {
-    struct data suspect;
+    char suspect[20];
     struct tiles *up;
     struct tiles *down;
     struct tiles *right;
@@ -30,7 +30,7 @@ struct tiles map[9];
 
 // prototypes
 void define_cards(struct data cards[]);
-void create_map(struct tiles map[], int wall[]);
+void create_map(struct tiles map[], int wall[], int tile_numbers[], struct data cards[]);
 
 int main()
 {
@@ -38,6 +38,7 @@ int main()
     define_cards(cards);// define characters and their hourglass(es)
 
     int card_numbers[9];
+    int tile_numbers[9];
 
     welcome();
 
@@ -59,7 +60,7 @@ int main()
 
             // map
             int wall[9];
-            shuffle_cards(card_numbers);
+            shuffle_cards(tile_numbers);
 
             for (int i = 0; i < 9; i++) {
                 wall[i] = rotation(); // randomly choose rotation of each card
@@ -107,8 +108,12 @@ void define_cards(struct data cards[])
     cards[8].hourglass = 2;
 }
 
-void create_map(struct tiles map[], int wall[])
+void create_map(struct tiles map[], int wall[], int tile_numbers[], struct data cards[])
 {
+    // characters
+    for (int i = 0; i < 9; i++) {
+        strcpy(map[i].suspect, cards[tile_numbers[i]].name);
+    }
     for (int i = 0; i < 9; i++) {
         if (wall[i] == UP) {
             map[i].up = NULL;
