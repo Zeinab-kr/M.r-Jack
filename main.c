@@ -31,6 +31,7 @@ struct data cards[9];
 // prototypes
 void define_cards(struct data cards[]);
 void create_map(int wall[], int tile_numbers[], struct data cards[]);
+void print_map(int wall[]);
 
 int main()
 {
@@ -65,6 +66,9 @@ int main()
             for (int i = 0; i < 9; i++) {
                 wall[i] = rotation(); // randomly choose rotation of each card
             }
+
+            create_map(wall, tile_numbers, cards);
+            print_map(wall);
         }
         else if (choice == 2) {
             ;
@@ -155,4 +159,78 @@ void create_map(int wall[], int tile_numbers[], struct data cards[])
         center->down->left = (struct tiles *)malloc(sizeof(struct tiles));
         strcpy(center->down->left, cards[tile_numbers[6]].name);
     } else {center->down->left = NULL;}
+}
+
+void print_map(int wall[])
+{
+    // first row
+    print_row(wall, 1);
+    // second row
+    print_row(wall, 2);
+    // third row
+    print_row(wall, 3);
+}
+
+void print_row(int wall[], int row)
+{
+    for (int i = (row-1)*3; i < row*3; i++) {
+        if (wall[i] == DOWN) {
+            printf("    |    ");
+        }
+        else {
+            for (int j = 0; j < 9; j++) {
+                printf(" ");
+            }
+        }
+    }
+    puts("");
+
+    for (int i = (row-1)*3; i < row*3; i++) {
+        if (wall[i] == DOWN) {
+            printf("    |    ");
+        }
+        else {
+            for (int j = 0; j < 9; j++) {
+                printf(" ");
+            }
+        }
+    }
+    puts("");
+
+    for (int i = (row-1)*3; i < row*3; i++) {
+        if (wall[i] == RIGHT) {
+            printf("----|    ");
+        }
+        else if (wall[i] == LEFT) {
+            printf("    |----");
+        }
+        else {
+            printf("---- ----");
+        }
+    }
+    puts("");
+
+    for (int i = (row-1)*3; i < row*3; i++) {
+        if (wall[i] == UP) {
+            printf("    |    ");
+        }
+        else {
+            for (int j = 0; j < 9; j++) {
+                printf(" ");
+            }
+        }
+    }
+    puts("");
+
+    for (int i = (row-1)*3; i < row*3; i++) {
+        if (wall[i] == UP) {
+            printf("    |    ");
+        }
+        else {
+            for (int j = 0; j < 9; j++) {
+                printf(" ");
+            }
+        }
+    }
+    puts("");
 }
