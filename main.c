@@ -26,9 +26,11 @@ struct tiles {
     struct tiles *left;
 };
 struct data cards[9];
+struct tiles map[9];
 
 // prototypes
 void define_cards(struct data cards[]);
+void create_map(struct tiles map[], int wall[]);
 
 int main()
 {
@@ -105,7 +107,20 @@ void define_cards(struct data cards[])
     cards[8].hourglass = 2;
 }
 
-void create_map()
+void create_map(struct tiles map[], int wall[])
 {
-
+    for (int i = 0; i < 9; i++) {
+        if (wall[i] == UP) {
+            map[i]->up = NULL;
+        }
+        if (wall[i] == DOWN) {
+            map[i]->down = NULL;
+        }
+        if (wall[i] == RIGHT) {
+            map[i]->right = NULL;
+        }
+        if (wall[i] = LEFT) {
+            map[i]->left = NULL;
+        }
+    }
 }
