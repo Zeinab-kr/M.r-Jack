@@ -111,16 +111,16 @@ void create_map(struct tiles map[], int wall[])
 {
     for (int i = 0; i < 9; i++) {
         if (wall[i] == UP) {
-            map[i]->up = NULL;
+            map[i].up = NULL;
         }
         if (wall[i] == DOWN) {
-            map[i]->down = NULL;
+            map[i].down = NULL;
         }
         if (wall[i] == RIGHT) {
-            map[i]->right = NULL;
+            map[i].right = NULL;
         }
         if (wall[i] = LEFT) {
-            map[i]->left = NULL;
+            map[i].left = NULL;
         }
     }
 }
