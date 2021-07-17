@@ -31,7 +31,8 @@ struct data cards[9];
 // prototypes
 void define_cards(struct data cards[]);
 void create_map(int wall[], int tile_numbers[], struct data cards[]);
-void print_map(int wall[]);
+void print_row(int wall[], int tile_numbers[], struct data cards[], int row);
+void print_map(int wall[], int tile_numbers[], struct data cards[]);
 
 int main()
 {
@@ -63,12 +64,10 @@ int main()
             int wall[9];
             shuffle_cards(tile_numbers);
 
-            for (int i = 0; i < 9; i++) {
-                wall[i] = rotation(); // randomly choose rotation of each card
-            }
+            rotation(wall); // randomly choose rotation of each tile
 
             create_map(wall, tile_numbers, cards);
-            print_map(wall);
+            print_map(wall, tile_numbers, cards);
         }
         else if (choice == 2) {
             ;
@@ -152,85 +151,102 @@ void create_map(int wall[], int tile_numbers[], struct data cards[])
     // lower row
     if (wall[7] != RIGHT) {
         center->down->right = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->down->right, cards[tile_numbers[8]].name);
+        strcpy(center->down->right->suspect, cards[tile_numbers[8]].name);
     } else {center->down->right = NULL;}
 
     if (wall[7] != LEFT) {
         center->down->left = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->down->left, cards[tile_numbers[6]].name);
+        strcpy(center->down->left->suspect, cards[tile_numbers[6]].name);
     } else {center->down->left = NULL;}
 }
 
-void print_map(int wall[])
+void print_map(int wall[], int tile_numbers[], struct data cards[])
 {
     // first row
-    print_row(wall, 1);
+    print_row(wall, tile_numbers, cards, 1);
     // second row
-    print_row(wall, 2);
+    print_row(wall, tile_numbers, cards, 2);
     // third row
-    print_row(wall, 3);
+    print_row(wall, tile_numbers, cards, 3);
 }
 
-void print_row(int wall[], int row)
+void print_row(int wall[], int tile_numbers[], struct data cards[], int row)
 {
-    for (int i = (row-1)*3; i < row*3; i++) {
-        if (wall[i] == DOWN) {
-            printf("    |    ");
-        }
-        else {
-            for (int j = 0; j < 9; j++) {
-                printf(" ");
+    for (int k = 0; k < 3; k++) {
+        for (int i = (row-1)*3; i < row*3; i++) {
+            if (wall[i] == UP) {
+                for (int j = 0; j < 21; j++) {
+                    printf(" ");
+                }
+            }
+            else {
+                for (int j = 0; j < 10; j++) {
+                    printf(" ");
+                }
+                printf("|");
+                for (int j = 0; j < 10; j++) {
+                    printf(" ");
+                }
             }
         }
+        puts("");
     }
-    puts("");
 
     for (int i = (row-1)*3; i < row*3; i++) {
-        if (wall[i] == DOWN) {
-            printf("    |    ");
-        }
-        else {
-            for (int j = 0; j < 9; j++) {
-                printf(" ");
-            }
-        }
-    }
-    puts("");
-
-    for (int i = (row-1)*3; i < row*3; i++) {
+        int len = strlen(cards[tile_numbers[i]].name);
         if (wall[i] == RIGHT) {
-            printf("----|    ");
+            printf("---");
+            for (int l = 0; l < (15-len)/2; l++) {
+                printf("-");
+            }
+            printf("%s", cards[tile_numbers[i]].name);
+            for (int l = 0; l < (15-len)/2; l++) {
+                printf(" ");
+            }
+            printf("   ");
         }
         else if (wall[i] == LEFT) {
-            printf("    |----");
+            printf("   ");
+            for (int l = 0; l < (15-len)/2; l++) {
+                printf(" ");
+            }
+            printf("%s", cards[tile_numbers[i]].name);
+            for (int l = 0; l < (15-len)/2; l++) {
+                printf("-");
+            }
+            printf("---");
         }
         else {
-            printf("---- ----");
+            printf("---");
+            for (int l = 0; l < (15-len)/2; l++) {
+                printf("-");
+            }
+            printf("%s", cards[tile_numbers[i]].name);
+            for (int l = 0; l < (15-len)/2; l++) {
+                printf("-");
+            }
+            printf("---");
         }
     }
     puts("");
 
-    for (int i = (row-1)*3; i < row*3; i++) {
-        if (wall[i] == UP) {
-            printf("    |    ");
-        }
-        else {
-            for (int j = 0; j < 9; j++) {
-                printf(" ");
+    for (int k = 0; k < 3; k++) {
+        for (int i = (row-1)*3; i < row*3; i++) {
+            if (wall[i] == DOWN) {
+                for (int j = 0; j < 21; j++) {
+                    printf(" ");
+                }
+            }
+            else {
+                for (int j = 0; j < 10; j++) {
+                    printf(" ");
+                }
+                printf("|");
+                for (int j = 0; j < 10; j++) {
+                    printf(" ");
+                }
             }
         }
+        puts("");
     }
-    puts("");
-
-    for (int i = (row-1)*3; i < row*3; i++) {
-        if (wall[i] == UP) {
-            printf("    |    ");
-        }
-        else {
-            for (int j = 0; j < 9; j++) {
-                printf(" ");
-            }
-        }
-    }
-    puts("");
 }

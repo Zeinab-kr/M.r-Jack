@@ -15,10 +15,12 @@ void shuffle_cards(int numbers[])
     }
 }
 
-int rotation()
+void rotation(int wall[])
 {
     srand(time(NULL));
-    return rand() % 4 + 1;
+    for (int i = 0; i < 9; i++) {
+        wall[i] = rand() % 4 + 1;
+    }
 }
 
 #endif // SHUFFLE_H_INCLUDED
