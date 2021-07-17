@@ -1,7 +1,7 @@
 #ifndef INSTRUCTIONS_H_INCLUDED
 #define INSTRUCTIONS_H_INCLUDED
 
-void welcome()
+void intro()
 {
     printf("********************************************************\n");
     printf("*                                                      *\n");
