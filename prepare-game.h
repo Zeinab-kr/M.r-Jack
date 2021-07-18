@@ -20,6 +20,18 @@ struct tiles {
 struct tiles *center;
 struct data cards[9];
 
+struct char_tokens {
+    char name[10];
+    int side;
+    int block;
+};
+struct char_tokens detective[3];
+
+struct action_tokens {
+    char actions[2][20];
+};
+struct action_tokens action[4];
+
 void define_cards(struct data cards[])
 {
     strcpy(cards[0].name, "John Smith");
@@ -182,6 +194,37 @@ void print_row(int wall[], int tile_numbers[], int row)
         }
         puts("");
     }
+}
+
+void define_detectives(struct char_tokens detective[])
+{
+    // Holmes
+    strcpy(detective[0].name, "Holmes");
+    detective[0].side = LEFT;
+    detective[0].block = 1;
+    // Watson
+    strcpy(detective[1].name, "Watson");
+    detective[1].side = RIGHT;
+    detective[1].block = 1;
+    // Toby
+    strcpy(detective[2].name, "Toby");
+    detective[2].side = DOWN;
+    detective[2].block = 2;
+}
+
+void define_action_tokens(struct action_tokens action[])
+{
+    strcpy(action[0].actions[0], "Holmes");
+    strcpy(action[0].actions[1], "Suspects");
+
+    strcpy(action[1].actions[0], "Watson");
+    strcpy(action[1].actions[1], "Toby");
+
+    strcpy(action[2].actions[0], "Rotate");
+    strcpy(action[2].actions[1], "Switch");
+
+    strcpy(action[3].actions[0], "Rotate");
+    strcpy(action[3].actions[1], "Joker");
 }
 
 #endif // PREPARE-GAME_H_INCLUDED
