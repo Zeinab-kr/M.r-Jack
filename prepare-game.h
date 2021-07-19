@@ -10,15 +10,16 @@ struct data {
     char name[20];
     int hourglass;
 };
-struct tiles {
-    char suspect[20];
-    struct tiles *up;
-    struct tiles *down;
-    struct tiles *right;
-    struct tiles *left;
-};
-struct tiles *center;
 struct data cards[9];
+
+struct tiles {
+    int number;
+    int wall;
+    char suspect[20];
+    struct tiles *next;
+};
+struct tiles *head = NULL;
+struct tiles *tail = NULL;
 
 struct char_tokens {
     char name[10];
@@ -28,11 +29,11 @@ struct char_tokens {
 struct char_tokens detective[3];
 
 struct action_tokens {
-    char actions[2][20];
+    char actions[2][10];
 };
 struct action_tokens action[4];
 
-void define_cards(struct data cards[])
+void define_cards()
 {
     strcpy(cards[0].name, "John Smith");
     cards[0].hourglass = 1;
@@ -62,141 +63,7 @@ void define_cards(struct data cards[])
     cards[8].hourglass = 2;
 }
 
-void create_map(int wall[], int tile_numbers[])
-{
-    // centric tile
-    center = (struct tiles *)malloc(sizeof(struct tiles));
-    strcpy(center->suspect, cards[tile_numbers[4]].name);
-
-    if (wall[4] != UP) {
-        center->up = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->up->suspect, cards[tile_numbers[1]].name);
-    } else {center->up = NULL;}
-
-    if (wall[4] != DOWN) {
-        center->down = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->down->suspect, cards[tile_numbers[7]].name);
-    } else {center->down = NULL;}
-
-    if (wall[4] != RIGHT) {
-        center->right = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->right->suspect, cards[tile_numbers[5]].name);
-    } else {center->right = NULL;}
-
-    if (wall[4] != LEFT) {
-        center->left = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->left->suspect, cards[tile_numbers[3]].name);
-    } else {center->left = NULL;}
-
-    // upper row
-    if (wall[1] != RIGHT) {
-        center->up->right = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->up->right->suspect, cards[tile_numbers[2]].name);
-    } else {center->up->right = NULL;}
-
-    if (wall[1] != LEFT) {
-        center->up->left = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->up->left->suspect, cards[tile_numbers[0]].name);
-    } else {center->up->right = NULL;}
-
-    // lower row
-    if (wall[7] != RIGHT) {
-        center->down->right = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->down->right->suspect, cards[tile_numbers[8]].name);
-    } else {center->down->right = NULL;}
-
-    if (wall[7] != LEFT) {
-        center->down->left = (struct tiles *)malloc(sizeof(struct tiles));
-        strcpy(center->down->left->suspect, cards[tile_numbers[6]].name);
-    } else {center->down->left = NULL;}
-}
-
-void print_map(int wall[], int tile_numbers[])
-{
-    // first row
-    print_row(wall, tile_numbers, 1);
-    // second row
-    print_row(wall, tile_numbers, 2);
-    // third row
-    print_row(wall, tile_numbers, 3);
-}
-
-void print_row(int wall[], int tile_numbers[], int row)
-{
-    for (int k = 0; k < 3; k++) {
-        for (int i = (row-1)*3; i < row*3; i++) {
-            if (wall[i] == UP) {
-                for (int j = 0; j < 21; j++) {
-                    printf(" ");
-                }
-            }
-            else {
-                for (int j = 0; j < 10; j++) {
-                    printf(" ");
-                }
-                printf("|");
-                for (int j = 0; j < 10; j++) {
-                    printf(" ");
-                }
-            }
-        }
-        puts("");
-    }
-
-    for (int i = (row-1)*3; i < row*3; i++) {
-        int len = strlen(cards[tile_numbers[i]].name);
-        if (wall[i] == RIGHT) {
-            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
-                printf("-");
-            }
-            printf("%s", cards[tile_numbers[i]].name);
-            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
-                printf(" ");
-            }
-        }
-        else if (wall[i] == LEFT) {
-            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
-                printf(" ");
-            }
-            printf("%s", cards[tile_numbers[i]].name);
-            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
-                printf("-");
-            }
-        }
-        else {
-            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
-                printf("-");
-            }
-            printf("%s", cards[tile_numbers[i]].name);
-            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
-                printf("-");
-            }
-        }
-    }
-    puts("");
-
-    for (int k = 0; k < 3; k++) {
-        for (int i = (row-1)*3; i < row*3; i++) {
-            if (wall[i] == DOWN) {
-                for (int j = 0; j < 21; j++) {
-                    printf(" ");
-                }
-            }
-            else {
-                for (int j = 0; j < 10; j++) {
-                    printf(" ");
-                }
-                printf("|");
-                for (int j = 0; j < 10; j++) {
-                    printf(" ");
-                }
-            }
-        }
-        puts("");
-    }
-}
-
-void define_detectives(struct char_tokens detective[])
+void define_detectives()
 {
     // Holmes
     strcpy(detective[0].name, "Holmes");
@@ -212,7 +79,7 @@ void define_detectives(struct char_tokens detective[])
     detective[2].block = 2;
 }
 
-void define_action_tokens(struct action_tokens action[])
+void define_action_tokens()
 {
     strcpy(action[0].actions[0], "Holmes");
     strcpy(action[0].actions[1], "Suspects");
@@ -225,6 +92,169 @@ void define_action_tokens(struct action_tokens action[])
 
     strcpy(action[3].actions[0], "Rotate");
     strcpy(action[3].actions[1], "Joker");
+}
+
+void create_map(int wall[], int tile_numbers[])
+{
+    // define the first tile
+    strcpy(head->suspect, cards[tile_numbers[0]].name);
+    head->wall = wall[0];
+    head->number = 1;
+    tail = head;
+
+    for (int i = 1; i < 9; tail = tail->next, i++) {
+        strcpy(tail->suspect, cards[tile_numbers[i]].name);
+        tail->wall = wall[i];
+        tail->number = i+1;
+    }
+}
+
+void print_row(struct tiles *first, struct char_tokens detective[], int row)
+{
+    int i;
+    struct tiles *current = (struct tiles *)malloc(sizeof(struct tiles));
+    for (int k = 0; k < 3; k++) {
+        for (int i = 0; i < 10; i++) {
+            printf(" ");
+        }
+        for (current = first, i = 0; i < 3; current = current->next, i++) {
+            if (current->wall == UP) {
+                for (int j = 0; j < 21; j++) {
+                    printf(" ");
+                }
+            }
+            else {
+                for (int j = 0; j < 10; j++) {
+                    printf(" ");
+                }
+                printf("|");
+                for (int j = 0; j < 10; j++) {
+                    printf(" ");
+                }
+            }
+        }
+        puts("");
+    }
+
+    int flag = 0;
+    for (int i = 0; i < 3; i++) {
+        if (detective[i].side == LEFT && detective[i].block == row) {
+            printf("%-10s", detective[i].name);
+            flag = 1;
+        }
+    }
+    if (flag == 0) {
+        for (int i = 0; i < 10; i++) {
+            printf(" ");
+        }
+    }
+    for (current = first, i = 0; i < 3; current = current->next, i++) {
+        int len = strlen(current->suspect);
+        if (current->wall == RIGHT) {
+            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
+                printf("-");
+            }
+            printf("%s", current->suspect);
+            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
+                printf(" ");
+            }
+        }
+        else if (current->wall == LEFT) {
+            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
+                printf(" ");
+            }
+            printf("%s", current->suspect);
+            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
+                printf("-");
+            }
+        }
+        else {
+            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
+                printf("-");
+            }
+            printf("%s", current->suspect);
+            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
+                printf("-");
+            }
+        }
+    }
+    flag = 0;
+    for (int i = 0; i < 3; i++) {
+        if (detective[i].side == RIGHT && detective[i].block == row) {
+            printf("%s", detective[i].name);
+            flag = 1;
+        }
+    }
+    if (flag == 0) {
+        for (int i = 0; i < 10; i++) {
+            printf(" ");
+        }
+    }
+    puts("");
+
+    for (int k = 0; k < 3; k++) {
+        for (int i = 0; i < 10; i++) {
+            printf(" ");
+        }
+        for (current = first, i = 0; i < 3; current = current->next, i++) {
+            if (current->wall == DOWN) {
+                for (int j = 0; j < 21; j++) {
+                    printf(" ");
+                }
+            }
+            else {
+                for (int j = 0; j < 10; j++) {
+                    printf(" ");
+                }
+                printf("|");
+                for (int j = 0; j < 10; j++) {
+                    printf(" ");
+                }
+            }
+        }
+        puts("");
+    }
+}
+
+void print_map(struct char_tokens detective[])
+{
+    for (int i = 0; i < 10; i++) {
+        printf(" ");
+    }
+    for (int i = 0; i < 3; i++) {
+        if (detective[i].side == UP) {
+            for (int j = 0; j < (int)floor((float)((21-strlen(detective[i].name))/2)) + (detective[i].block-1)*21; j++) {
+                printf(" ");
+            }
+            printf("%s", detective[i].name);
+        }
+    }
+    puts("");
+
+
+    struct tiles *current  = (struct tiles *)malloc(sizeof(struct tiles));
+    current = head;
+    // first row
+    print_row(current, detective, 1);
+    // second row
+    current = current->next->next->next;
+    print_row(current, detective, 2);
+    // third row
+    current = current->next->next->next;
+    print_row(current, detective, 3);
+
+    for (int i = 0; i < 10; i++) {
+        printf(" ");
+    }
+    for (int i = 0; i < 3; i++) {
+        if (detective[i].side == DOWN) {
+            for (int j = 0; j < (int)floor((float)((21-strlen(detective[i].name))/2)) + (detective[i].block-1)*21; j++) {
+                printf(" ");
+            }
+            printf("%s", detective[i].name);
+        }
+    }
+    puts("");
 }
 
 #endif // PREPARE-GAME_H_INCLUDED
