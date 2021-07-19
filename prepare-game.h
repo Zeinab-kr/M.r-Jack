@@ -94,18 +94,17 @@ void define_action_tokens()
     strcpy(action[3].actions[1], "Joker");
 }
 
-void create_map(int wall[], int tile_numbers[])
+void create_map(int wall[], int tile_numbers[], struct data cards[])
 {
-    // define the first tile
-    strcpy(head->suspect, cards[tile_numbers[0]].name);
-    head->wall = wall[0];
-    head->number = 1;
-    tail = head;
-
-    for (int i = 1; i < 9; tail = tail->next, i++) {
-        strcpy(tail->suspect, cards[tile_numbers[i]].name);
-        tail->wall = wall[i];
-        tail->number = i+1;
+    for (int i = 0; i < 9; tail = tail->next, i++) {
+        struct tiles *new_tile = (struct tiles *)malloc(sizeof(struct tiles));
+        strcpy(new_tile->suspect, cards[tile_numbers[i]].name);
+        new_tile->wall = wall[i];
+        tail = new_tile;
+        tail->next = NULL;
+        if (i == 0) {
+            head = tail;
+        }
     }
 }
 
