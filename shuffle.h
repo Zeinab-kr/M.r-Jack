@@ -31,4 +31,12 @@ void rotation(int wall[])
     wall[7] = DOWN;
 }
 
+void flip_action_tokens(int action_side[])
+{
+    srand(time(NULL));
+    for (int i = 0; i < 4; i++) {
+        action_side[i] = rand() % 2;
+    }
+}
+
 #endif // SHUFFLE_H_INCLUDED
