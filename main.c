@@ -5,6 +5,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <conio.h>
 #include <windows.h>
 #include "instructions.h"
 #include "shuffle.h"
@@ -13,7 +14,7 @@
 int main()
 {
     int choice;
-    define_cards(cards);// define characters and their hourglass(es)
+    define_cards();// define characters and their hourglass(es)
 
     int card_numbers[9];
     int tile_numbers[9];
@@ -35,15 +36,31 @@ int main()
             printf("Holmes must close his eyes\n");
             Sleep(5000);
             printf("Your character is %s\n", cards[jack_char].name);
+            Sleep(3000);
+            system("cls"); // clear console after 3 seconds so Holmes cannot see Jack's character
+
+            //tokens
+            define_detectives();
+            define_action_tokens();
 
             // map
             int wall[9];
             shuffle_cards(tile_numbers);
-
             rotation(wall); // randomly choose rotation of each tile
-
             create_map(wall, tile_numbers);
-            print_map(wall, tile_numbers);
+            print_map(detective);
+            for (int i = 0; i < 9; head = head->next, i++) {
+                printf("%s\n", head->suspect);
+            }
+
+            int action_side[4];
+            for (int i; i < 4; i++) {
+                srand(time(NULL));
+                action_side[i] = rand() % 2; // flip action tokens
+            }
+            for (int i = 0; i < 4; i++) {
+                printf("%d. %s\n", i+1, action[i].actions[action_side[i]]);
+            }
         }
         else if (choice == 2) {
             ;
