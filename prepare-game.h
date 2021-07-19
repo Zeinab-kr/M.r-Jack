@@ -96,24 +96,28 @@ void define_action_tokens()
 
 void create_map(int wall[], int tile_numbers[], struct data cards[])
 {
-    for (int i = 0; i < 9; tail = tail->next, i++) {
-        struct tiles *new_tile = (struct tiles *)malloc(sizeof(struct tiles));
+    struct tiles *new_tile = (struct tiles *)malloc(sizeof(struct tiles));
+    strcpy(new_tile->suspect, cards[tile_numbers[0]].name);
+    new_tile->wall = wall[0];
+    new_tile->number = 1;
+    head = new_tile;
+    tail = head;
+    for (int i = 1; i < 9; tail = tail->next, i++) {
+        new_tile = (struct tiles *)malloc(sizeof(struct tiles));
         strcpy(new_tile->suspect, cards[tile_numbers[i]].name);
         new_tile->wall = wall[i];
-        tail = new_tile;
-        tail->next = NULL;
-        if (i == 0) {
-            head = tail;
-        }
+        new_tile->number = i+1;
+        tail->next = new_tile;
+        tail->next->next = NULL;
     }
 }
 
 void print_row(struct tiles *first, struct char_tokens detective[], int row)
 {
     int i;
-    struct tiles *current = (struct tiles *)malloc(sizeof(struct tiles));
+    struct tiles *current;
     for (int k = 0; k < 3; k++) {
-        for (int i = 0; i < 10; i++) {
+        for (i = 0; i < 10; i++) {
             printf(" ");
         }
         for (current = first, i = 0; i < 3; current = current->next, i++) {
@@ -136,63 +140,63 @@ void print_row(struct tiles *first, struct char_tokens detective[], int row)
     }
 
     int flag = 0;
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
         if (detective[i].side == LEFT && detective[i].block == row) {
             printf("%-10s", detective[i].name);
             flag = 1;
         }
     }
     if (flag == 0) {
-        for (int i = 0; i < 10; i++) {
+        for (i = 0; i < 10; i++) {
             printf(" ");
         }
     }
     for (current = first, i = 0; i < 3; current = current->next, i++) {
         int len = strlen(current->suspect);
         if (current->wall == RIGHT) {
-            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
+            for (int j = 0; j < (int)floor((float)(21-len)/2); j++) {
                 printf("-");
             }
             printf("%s", current->suspect);
-            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
+            for (int j = 0; j < (int)ceil((float)(21-len)/2); j++) {
                 printf(" ");
             }
         }
         else if (current->wall == LEFT) {
-            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
+            for (int j = 0; j < (int)floor((float)(21-len)/2); j++) {
                 printf(" ");
             }
             printf("%s", current->suspect);
-            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
+            for (int j = 0; j < (int)ceil((float)(21-len)/2); j++) {
                 printf("-");
             }
         }
         else {
-            for (int l = 0; l < (int)floor((float)(21-len)/2); l++) {
+            for (int j = 0; j < (int)floor((float)(21-len)/2); j++) {
                 printf("-");
             }
             printf("%s", current->suspect);
-            for (int l = 0; l < (int)ceil((float)(21-len)/2); l++) {
+            for (int j = 0; j < (int)ceil((float)(21-len)/2); j++) {
                 printf("-");
             }
         }
     }
     flag = 0;
-    for (int i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
         if (detective[i].side == RIGHT && detective[i].block == row) {
             printf("%s", detective[i].name);
             flag = 1;
         }
     }
     if (flag == 0) {
-        for (int i = 0; i < 10; i++) {
+        for (i = 0; i < 10; i++) {
             printf(" ");
         }
     }
     puts("");
 
     for (int k = 0; k < 3; k++) {
-        for (int i = 0; i < 10; i++) {
+        for (i = 0; i < 10; i++) {
             printf(" ");
         }
         for (current = first, i = 0; i < 3; current = current->next, i++) {
@@ -231,8 +235,10 @@ void print_map(struct char_tokens detective[])
     puts("");
 
 
-    struct tiles *current  = (struct tiles *)malloc(sizeof(struct tiles));
-    current = head;
+    struct tiles *current = head;
+    for (int i = 1; i <=3; i++, current = current->next->next->next) {
+        print_row(current, detective, i);
+    }/*
     // first row
     print_row(current, detective, 1);
     // second row
@@ -240,7 +246,7 @@ void print_map(struct char_tokens detective[])
     print_row(current, detective, 2);
     // third row
     current = current->next->next->next;
-    print_row(current, detective, 3);
+    print_row(current, detective, 3);*/
 
     for (int i = 0; i < 10; i++) {
         printf(" ");
