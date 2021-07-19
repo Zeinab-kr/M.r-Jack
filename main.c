@@ -34,9 +34,9 @@ int main()
             int jack_char = card_numbers[0];
             printf("M.r Jack can see his character after 5 seconds\n");
             printf("Holmes must close his eyes\n");
-            Sleep(5000);
+            //Sleep(5000);
             printf("Your character is %s\n", cards[jack_char].name);
-            Sleep(3000);
+            //Sleep(3000);
             system("cls"); // clear console after 3 seconds so Holmes cannot see Jack's character
 
             //tokens
@@ -47,19 +47,13 @@ int main()
             int wall[9];
             shuffle_cards(tile_numbers);
             rotation(wall); // randomly choose rotation of each tile
-            create_map(wall, tile_numbers);
+            create_map(wall, tile_numbers, cards);
             print_map(detective);
-            for (int i = 0; i < 9; head = head->next, i++) {
-                printf("%s\n", head->suspect);
-            }
 
             int action_side[4];
-            for (int i; i < 4; i++) {
-                srand(time(NULL));
-                action_side[i] = rand() % 2; // flip action tokens
-            }
+            flip_action_tokens(action_side);
             for (int i = 0; i < 4; i++) {
-                printf("%d. %s\n", i+1, action[i].actions[action_side[i]]);
+                printf("%d. %s\n", i+1, action[i].name[action_side[i]]);
             }
         }
         else if (choice == 2) {
