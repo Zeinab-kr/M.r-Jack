@@ -76,12 +76,74 @@ void suspects()
 
 void watson()
 {
+    int choice;
+    printf("1 step forward or 2? ");
+    scanf("%d", &choice);
 
+    if (detective[1].side == LEFT) {
+        detective[1].block -= choice;
+        if (detective[1].block < 1) {
+            detective[1].block = 1 - detective[1].block;
+            detective[1].side = UP;
+        }
+    }
+    if (detective[1].side == DOWN) {
+        detective[1].block -= choice;
+        if (detective[1].block < 1) {
+            detective[1].block = 3 + detective[1].block;
+            detective[1].side = LEFT;
+        }
+    }
+    if (detective[1].side == RIGHT) {
+        detective[1].block += choice;
+        if (detective[1].block > 3) {
+            detective[1].block = 7 - detective[1].block;
+            detective[1].side = DOWN;
+        }
+    }
+    if (detective[1].side == UP) {
+        detective[1].block += choice;
+        if (detective[1].block > 3) {
+            detective[1].block = detective[1].block - 3;
+            detective[1].side = RIGHT;
+        }
+    }
 }
 
 void toby()
 {
+    int choice;
+    printf("1 step forward or 2? ");
+    scanf("%d", &choice);
 
+    if (detective[2].side == LEFT) {
+        detective[2].block -= choice;
+        if (detective[2].block < 1) {
+            detective[2].block = 1 - detective[2].block;
+            detective[2].side = UP;
+        }
+    }
+    if (detective[2].side == DOWN) {
+        detective[2].block -= choice;
+        if (detective[2].block < 1) {
+            detective[2].block = 3 + detective[2].block;
+            detective[2].side = LEFT;
+        }
+    }
+    if (detective[2].side == RIGHT) {
+        detective[2].block += choice;
+        if (detective[2].block > 3) {
+            detective[2].block = 7 - detective[2].block;
+            detective[2].side = DOWN;
+        }
+    }
+    if (detective[2].side == UP) {
+        detective[2].block += choice;
+        if (detective[2].block > 3) {
+            detective[2].block = detective[2].block - 3;
+            detective[2].side = RIGHT;
+        }
+    }
 }
 
 void rotate_tile()
