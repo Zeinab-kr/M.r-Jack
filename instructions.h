@@ -44,11 +44,21 @@ void end_game_menu()
     printf("Enter your choice: ");
 }
 
-void character_menu()
+void action_menu(struct action_tokens action[], int action_side[], int choice[])
 {
-    printf("1. M.r Jack\n");
-    printf("2. Sherlock Holmes\n");
-    printf("Choose your character: ");
+    int i = 0;
+    for (int j = 1; j <= 4; j++) {
+        int flag = 1;
+        for (int k = 0; k < 4; k++) {
+            if (j == choice[k]) {
+                flag = 0;
+            }
+        }
+        if (flag == 1) {
+            printf("%d. %s\n", ++i, action[j-1].name[action_side[j-1]]);
+        }
+    }
+    printf("%d. Pause Game\n", ++i);
 }
 
 #endif // INSTRUCTIONS_H_INCLUDED
