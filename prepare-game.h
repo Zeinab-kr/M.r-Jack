@@ -29,7 +29,7 @@ struct char_tokens {
 struct char_tokens detective[3];
 
 struct action_tokens {
-    char actions[2][10];
+    char name[2][10];
 };
 struct action_tokens action[4];
 
@@ -81,17 +81,17 @@ void define_detectives()
 
 void define_action_tokens()
 {
-    strcpy(action[0].actions[0], "Holmes");
-    strcpy(action[0].actions[1], "Suspects");
+    strcpy(action[0].name[0], "Holmes");
+    strcpy(action[0].name[1], "Suspects");
 
-    strcpy(action[1].actions[0], "Watson");
-    strcpy(action[1].actions[1], "Toby");
+    strcpy(action[1].name[0], "Watson");
+    strcpy(action[1].name[1], "Toby");
 
-    strcpy(action[2].actions[0], "Rotate");
-    strcpy(action[2].actions[1], "Switch");
+    strcpy(action[2].name[0], "Rotate");
+    strcpy(action[2].name[1], "Switch");
 
-    strcpy(action[3].actions[0], "Rotate");
-    strcpy(action[3].actions[1], "Joker");
+    strcpy(action[3].name[0], "Rotate");
+    strcpy(action[3].name[1], "Joker");
 }
 
 void create_map(int wall[], int tile_numbers[], struct data cards[])
@@ -238,15 +238,7 @@ void print_map(struct char_tokens detective[])
     struct tiles *current = head;
     for (int i = 1; i <=3; i++, current = current->next->next->next) {
         print_row(current, detective, i);
-    }/*
-    // first row
-    print_row(current, detective, 1);
-    // second row
-    current = current->next->next->next;
-    print_row(current, detective, 2);
-    // third row
-    current = current->next->next->next;
-    print_row(current, detective, 3);*/
+    }
 
     for (int i = 0; i < 10; i++) {
         printf(" ");
