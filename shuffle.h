@@ -1,11 +1,6 @@
 #ifndef SHUFFLE_H_INCLUDED
 #define SHUFFLE_H_INCLUDED
 
-#define UP 1
-#define DOWN 2
-#define RIGHT 3
-#define LEFT 4
-
 void shuffle_cards(int numbers[])
 {
     for (int i = 0; i < 9; i++) {
