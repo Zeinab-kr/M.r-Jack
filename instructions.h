@@ -46,19 +46,19 @@ void end_game_menu()
 
 void action_menu(struct action_tokens action[], int action_side[], int choice[])
 {
-    int i = 0;
-    for (int j = 1; j <= 4; j++) {
+    int i ;
+    for (i = 1; i <= 4; i++) {
         int flag = 1;
         for (int k = 0; k < 4; k++) {
-            if (j == choice[k]) {
+            if (i == choice[k]) {
                 flag = 0;
             }
         }
         if (flag == 1) {
-            printf("%d. %s\n", ++i, action[j-1].name[action_side[j-1]]);
+            printf("%d. %s\n", i, action[i-1].name[action_side[i-1]]);
         }
     }
-    printf("%d. Pause Game\n", ++i);
+    printf("%d. Pause Game\n", i);
 }
 
 #endif // INSTRUCTIONS_H_INCLUDED

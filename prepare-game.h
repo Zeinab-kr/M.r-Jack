@@ -30,6 +30,7 @@ struct char_tokens detective[3];
 
 struct action_tokens {
     char name[2][10];
+    int number[2];
 };
 struct action_tokens action[4];
 
@@ -83,15 +84,23 @@ void define_action_tokens()
 {
     strcpy(action[0].name[0], "Holmes");
     strcpy(action[0].name[1], "Suspects");
+    action[0].number[0] = 0;
+    action[0].number[1] = 1;
 
     strcpy(action[1].name[0], "Watson");
     strcpy(action[1].name[1], "Toby");
+    action[1].number[0] = 2;
+    action[1].number[1] = 3;
 
     strcpy(action[2].name[0], "Rotate");
     strcpy(action[2].name[1], "Switch");
+    action[2].number[0] = 4;
+    action[2].number[1] = 5;
 
     strcpy(action[3].name[0], "Rotate");
     strcpy(action[3].name[1], "Joker");
+    action[3].number[0] = 6;
+    action[3].number[1] = 7;
 }
 
 void create_map(int wall[], int tile_numbers[], struct data cards[])
