@@ -50,7 +50,7 @@ void suspects()
             }
         }
     }
-    if (round % 2 == 1) {
+    if (game_round % 2 == 1) {
 //      Holmes's turn
         printf("%s\n", cards[card_numbers[0]].name);
         seen_cards[++number_of_seen_card] = card_numbers[0]; // add this card to seen
@@ -216,9 +216,9 @@ void joker()
 {
     int choice, char_choice;
     for (int i = 0; i < 3; i++) {
-        printf("%d. %s\n", i+1; detective[i].name);
+        printf("%d. %s\n", i+1, detective[i].name);
     }
-    if (round % 2 == 0) {
+    if (game_round % 2 == 0) {
         printf("4. None");
     }
     printf("Which detective do you want to move? ");
