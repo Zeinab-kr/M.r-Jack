@@ -1,8 +1,6 @@
 #ifndef ACTION_H_INCLUDED
 #define ACTION_H_INCLUDED
 
-void (*do_action[8])() = {holmes, suspects, watson, toby, rotate_tile, switch_tiles, rotate_tile, joker};
-
 void holmes()
 {
 
@@ -11,7 +9,7 @@ void holmes()
 void suspects()
 {
 //  discard the cards that have been seen before
-    int flag = 0;
+    int flag = 0, round;
     while (flag != 1) {
         shuffle_cards(card_numbers);
         for (int i = 0; i < 9; i++) {
@@ -94,7 +92,27 @@ void rotate_tile()
 
 void switch_tiles()
 {
+    int choice_1, choice_2;
+    for (int i = 1; i <= 9; i++) {
+        printf("%d ");
+        if (i % 3 == 0) {
+            puts("");
+        }
+    }
+    printf("Choose 2 tiles to switch(<first> <second>): ");
+    scanf("%d %d", &choice_1, &choice_2);
 
+    int j, k;
+    struct tiles *current_1, *current_2;
+    for (current_1 = head, j = 0; j < 9; j++, current_1 = current_1->next) {
+        for (current_2 = head, k = 0; k < 9; k++, current_2 = current_2->next) {
+            if ((current_1->number == tile_numbers[choice_1]) && (current_2->number == tile_numbers[choice_2])) {
+                struct tiles *temp = current_1;
+                current_1 = current_2;
+                current_2 = temp;
+            }
+        }
+    }
 }
 
 void joker()
