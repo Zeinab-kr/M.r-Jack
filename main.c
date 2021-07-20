@@ -34,9 +34,9 @@ int main()
             int jack_char = card_numbers[0];
             printf("M.r Jack can see his character after 5 seconds\n");
             printf("Holmes must close his eyes\n");
-            //Sleep(5000);
+            Sleep(5000);
             printf("Your character is %s\n", cards[jack_char].name);
-            //Sleep(3000);
+            Sleep(3000);
             system("cls"); // clear console after 3 seconds so Holmes cannot see Jack's character
 
             //tokens
@@ -53,7 +53,7 @@ int main()
             int action_side[4];
             flip_action_tokens(action_side);
             for (int i = 0; i < 4; i++) {
-                printf("%d. %s\n", i+1, action[i].name[action_side[i]]);
+                printf("%d. %s\n", i+1, action[i].name[action_side[i]]); // print actions
             }
         }
         else if (choice == 2) {
