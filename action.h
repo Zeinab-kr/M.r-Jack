@@ -3,7 +3,38 @@
 
 void holmes()
 {
+    int choice;
+    printf("1 step forward or 2? ");
+    scanf("%d", &choice);
 
+    if (detective[0].side == LEFT) {
+        detective[0].block -= choice;
+        if (detective[0].block < 1) {
+            detective[0].block = 1 - detective[0].block;
+            detective[0].side = UP;
+        }
+    }
+    if (detective[0].side == DOWN) {
+        detective[0].block -= choice;
+        if (detective[0].block < 1) {
+            detective[0].block = 3 + detective[0].block;
+            detective[0].side = LEFT;
+        }
+    }
+    if (detective[0].side == RIGHT) {
+        detective[0].block += choice;
+        if (detective[0].block > 3) {
+            detective[0].block = 7 - detective[0].block;
+            detective[0].side = DOWN;
+        }
+    }
+    if (detective[0].side == UP) {
+        detective[0].block += choice;
+        if (detective[0].block > 3) {
+            detective[0].block = detective[0].block - 3;
+            detective[0].side = RIGHT;
+        }
+    }
 }
 
 void suspects()
@@ -22,8 +53,9 @@ void suspects()
     if (round % 2 == 1) {
 //      Holmes's turn
         printf("%s\n", cards[card_numbers[0]].name);
-        seen_cards[++number_of_seen_card] = card_numbers[0];
+        seen_cards[++number_of_seen_card] = card_numbers[0]; // add this card to seen
 
+//      the suspicion has been removed from this character so delete it from the map
         struct tiles *current = head;
         for (int i = 0; i < 9; i++, current = current->next) {
             if (strcmp(cards[card_numbers[0]].name, current->suspect) == 0) {
@@ -33,9 +65,12 @@ void suspects()
     }
     else {
 //      M.r Jack's turn
+        printf("Holmes must close his eyes\n");
+        printf("You can see the card after 3 seconds\n");
+        Sleep(3000);
         printf("%s\n", cards[card_numbers[0]].name);
         hourglass += cards[card_numbers[0]].hourglass;
-        seen_cards[++number_of_seen_card] = card_numbers[0];
+        seen_cards[++number_of_seen_card] = card_numbers[0]; // add this card to seen
     }
 }
 
