@@ -40,7 +40,7 @@ void holmes()
 void suspects()
 {
 //  discard the cards that have been seen before
-    int flag = 0, round;
+    int flag = 0;
     while (flag != 1) {
         shuffle_cards(card_numbers);
         for (int i = 0; i < 9; i++) {
