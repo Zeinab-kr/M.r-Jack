@@ -12,6 +12,13 @@
 #include "shuffle.h"
 #include "action.h"
 
+// global variables
+int card_numbers[9];
+int tile_numbers[9];
+int hourglass = 0;
+int seen_cards[9];
+int number_of_seen_card = 0;
+
 int main()
 {
     int choice;
@@ -27,8 +34,6 @@ int main()
             int char_choice;
 
 //          define game
-            int card_numbers[9];
-            int tile_numbers[9];
             define_cards();// define characters and their hourglass(es)
             define_detectives();
             define_action_tokens();
@@ -37,11 +42,12 @@ int main()
 //          -----------------------------------------------------------------------------------------------------
 //          M.r Jack's character
             int jack_char = card_numbers[0];
+            seen_cards[0] = jack_char;
             printf("M.r Jack can see his character after 5 seconds\n");
             printf("Holmes must close his eyes\n");
-            //Sleep(5000);
+            Sleep(5000);
             printf("Your character is %s\n", cards[jack_char].name);
-            //Sleep(3000);
+            Sleep(3000);
             system("cls"); // clear console after 3 seconds so Holmes cannot see Jack's character
 //          -----------------------------------------------------------------------------------------------------
 //          map
