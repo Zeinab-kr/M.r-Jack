@@ -53,7 +53,43 @@ void toby()
 
 void rotate_tile()
 {
+    int choice;
+    int degree_choice;
+    for (int i = 1; i <= 9; i++) {
+        printf("%d ");
+        if (i % 3 == 0) {
+            puts("");
+        }
+    }
+    printf("Choose a tile to rotate: ");
+    scanf("%d", &choice);
+    printf("1. 90  2. 180  3. 270\n");
+    printf("Choose degree: ");
+    scanf("%d", &degree_choice);
 
+    struct tiles *current = head;
+    for (int i = 0; i < 9; i++, current = current->next) {
+        if (current->number == tile_numbers[choice]) {
+            if (degree_choice == 1) {
+                current->wall += 1;
+                if (current->wall > 4) {
+                    current->wall -= 4;
+                }
+            }
+            if (degree_choice == 2) {
+                current->wall += 2;
+                if (current->wall > 4) {
+                    current->wall -= 4;
+                }
+            }
+            if (degree_choice == 3) {
+                current->wall += 3;
+                if (current->wall > 4) {
+                    current->wall -= 4;
+                }
+            }
+        }
+    }
 }
 
 void switch_tiles()
