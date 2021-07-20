@@ -214,7 +214,52 @@ void switch_tiles()
 
 void joker()
 {
+    int choice, char_choice;
+    for (int i = 0; i < 3; i++) {
+        printf("%d. %s\n", i+1; detective[i].name);
+    }
+    if (round % 2 == 0) {
+        printf("4. None");
+    }
+    printf("Which detective do you want to move? ");
+    scanf("%d", &char_choice);
 
+//  if it's m.r Jack's turn and he doesn't want to move any character, return
+    if (char_choice == 4) {
+        return;
+    }
+
+    printf("1 step forward or 2? ");
+    scanf("%d", &choice);
+
+    if (detective[char_choice-1].side == LEFT) {
+        detective[char_choice-1].block -= choice;
+        if (detective[char_choice-1].block < 1) {
+            detective[char_choice-1].block = 1 - detective[char_choice-1].block;
+            detective[char_choice-1].side = UP;
+        }
+    }
+    if (detective[char_choice-1].side == DOWN) {
+        detective[char_choice-1].block -= choice;
+        if (detective[char_choice-1].block < 1) {
+            detective[char_choice-1].block = 3 + detective[char_choice-1].block;
+            detective[char_choice-1].side = LEFT;
+        }
+    }
+    if (detective[char_choice-1].side == RIGHT) {
+        detective[char_choice-1].block += choice;
+        if (detective[char_choice-1].block > 3) {
+            detective[char_choice-1].block = 7 - detective[char_choice-1].block;
+            detective[char_choice-1].side = DOWN;
+        }
+    }
+    if (detective[char_choice-1].side == UP) {
+        detective[char_choice-1].block += choice;
+        if (detective[char_choice-1].block > 3) {
+            detective[char_choice-1].block = detective[char_choice-1].block - 3;
+            detective[char_choice-1].side = RIGHT;
+        }
+    }
 }
 
 #endif // ACTION_H_INCLUDED
