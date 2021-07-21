@@ -49,9 +49,9 @@ int main()
 //          M.r Jack's character
             int jack_char = card_numbers[0];
             seen_cards[0] = jack_char;
-            printf("M.r Jack can see his character after 5 seconds\n");
+            printf("M.r Jack can see his character after 3 seconds\n");
             printf("Holmes must close his eyes\n");
-            Sleep(5000);
+            Sleep(3000);
             printf("Your character is %s\n", cards[jack_char].name);
             Sleep(3000);
             system("cls"); // clear console after 3 seconds so Holmes cannot see Jack's character
@@ -72,23 +72,31 @@ int main()
             printf("Holmes pick an action: ");
             scanf("%d", &action_choice[0]);
             (*do_action[action[action_choice[0]-1].number[action_side[action_choice[0]-1]]])();
+            system("cls");
+            print_map(detective);
 
             puts("");
             action_menu(action, action_side, action_choice);
             printf("M.r Jack pick an action: ");
             scanf("%d", &action_choice[1]);
             (*do_action[action[action_choice[1]-1].number[action_side[action_choice[1]-1]]])();
+            system("cls");
+            print_map(detective);
             puts("");
             action_menu(action, action_side, action_choice);
             printf("Pick another one: ");
             scanf("%d", &action_choice[2]);
             (*do_action[action[action_choice[2]-1].number[action_side[action_choice[2]-1]]])();
+            system("cls");
+            print_map(detective);
 
             puts("");
             action_menu(action, action_side, action_choice);
             printf("Holmes pick the action: ");
             scanf("%d", &action_choice[3]);
             (*do_action[action[action_choice[3]-1].number[action_side[action_choice[3]-1]]])();
+            system("cls");
+            print_map(detective);
 //          -----------------------------------------------------------------------------------------------------
         }
         else if (choice == 2) {
