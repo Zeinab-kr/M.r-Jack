@@ -49,18 +49,18 @@ int main()
 //          M.r Jack's character
             int jack_char = card_numbers[0];
             seen_cards[0] = jack_char;
-            printf("M.r Jack can see his character after 3 seconds\n");
+            printf("M.r Jack can see his character after 5 seconds\n");
             printf("Holmes must close his eyes\n");
-            Sleep(3000);
+            //Sleep(5000);
             printf("Your character is %s\n", cards[jack_char].name);
-            Sleep(3000);
+            //Sleep(3000);
             system("cls"); // clear console after 3 seconds so Holmes cannot see Jack's character
 //          -----------------------------------------------------------------------------------------------------
 //          map
             int wall[9];
             rotation(wall); // randomly choose rotation of each tile
-            create_map(wall, tile_numbers, cards);
-            print_map(detective);
+            create_map(wall);
+            print_map();
 //          -----------------------------------------------------------------------------------------------------
             ++game_round;
 //          actions

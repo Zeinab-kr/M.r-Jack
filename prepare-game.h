@@ -103,25 +103,25 @@ void define_action_tokens()
     action[3].number[1] = 7;
 }
 
-void create_map(int wall[], int tile_numbers[], struct data cards[])
+void create_map(int wall[])
 {
     struct tiles *new_tile = (struct tiles *)malloc(sizeof(struct tiles));
     strcpy(new_tile->suspect, cards[tile_numbers[0]].name);
     new_tile->wall = wall[0];
-    new_tile->number = 1;
+    new_tile->number = 0;
     head = new_tile;
     tail = head;
     for (int i = 1; i < 9; tail = tail->next, i++) {
         new_tile = (struct tiles *)malloc(sizeof(struct tiles));
         strcpy(new_tile->suspect, cards[tile_numbers[i]].name);
         new_tile->wall = wall[i];
-        new_tile->number = i+1;
+        new_tile->number = i;
         tail->next = new_tile;
         tail->next->next = NULL;
     }
 }
 
-void print_row(struct tiles *first, struct char_tokens detective[], int row)
+void print_row(struct tiles *first, int row)
 {
     int i;
     struct tiles *current;
@@ -228,7 +228,7 @@ void print_row(struct tiles *first, struct char_tokens detective[], int row)
     }
 }
 
-void print_map(struct char_tokens detective[])
+void print_map()
 {
     for (int i = 0; i < 10; i++) {
         printf(" ");
@@ -246,7 +246,7 @@ void print_map(struct char_tokens detective[])
 
     struct tiles *current = head;
     for (int i = 1; i <=3; i++, current = current->next->next->next) {
-        print_row(current, detective, i);
+        print_row(current, i);
     }
 
     for (int i = 0; i < 10; i++) {

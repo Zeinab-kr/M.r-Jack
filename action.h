@@ -1,7 +1,7 @@
 #ifndef ACTION_H_INCLUDED
 #define ACTION_H_INCLUDED
 
-void holmes()
+void holmes() //***
 {
     int choice;
     printf("1 step forward or 2? ");
@@ -161,13 +161,14 @@ void rotate_tile()
     }
     printf("Choose a tile to rotate: ");
     scanf("%d", &choice);
+    choice--;
     printf("1. 90  2. 180  3. 270\n");
     printf("Choose degree: ");
     scanf("%d", &degree_choice);
 
     struct tiles *current = head;
     for (int i = 0; i < 9; i++, current = current->next) {
-        if (current->number == tile_numbers[choice]) {
+        if (current->number == choice) {
             if (degree_choice == 1) {
                 current->wall += 1;
                 if (current->wall > 4) {
@@ -190,7 +191,7 @@ void rotate_tile()
     }
 }
 
-void switch_tiles()
+void switch_tiles()//***
 {
     int choice_1, choice_2;
     for (int i = 1; i <= 9; i++) {
@@ -215,7 +216,7 @@ void switch_tiles()
     }
 }
 
-void joker()
+void joker()//***
 {
     int choice, char_choice;
     for (int i = 0; i < 3; i++) {
