@@ -40,25 +40,27 @@ void holmes()
 void suspects()
 {
 //  discard the cards that have been seen before
+    int card_number[9];
     int flag = 0;
     while (flag != 1) {
-        shuffle_cards(card_numbers);
+        shuffle_cards(card_number);
         for (int i = 0; i < 9; i++) {
             flag = 1;
-            if (seen_cards[i] == card_numbers[0]) {
+            if (seen_cards[i] == card_number[0]) {
                 flag = 0;
             }
         }
     }
     if (game_round % 2 == 1) {
 //      Holmes's turn
-        printf("%s\n", cards[card_numbers[0]].name);
-        seen_cards[++number_of_seen_card] = card_numbers[0]; // add this card to seen
+        printf("%s\n", cards[card_number[0]].name);
+        Sleep(3000);
+        seen_cards[++number_of_seen_card] = card_number[0]; // add this card to seen
 
 //      the suspicion has been removed from this character so delete it from the map
         struct tiles *current = head;
         for (int i = 0; i < 9; i++, current = current->next) {
-            if (strcmp(cards[card_numbers[0]].name, current->suspect) == 0) {
+            if (strcmp(cards[card_number[0]].name, current->suspect) == 0) {
                 strcpy(current->suspect, " ");
             }
         }
@@ -68,9 +70,10 @@ void suspects()
         printf("Holmes must close his eyes\n");
         printf("You can see the card after 3 seconds\n");
         Sleep(3000);
-        printf("%s\n", cards[card_numbers[0]].name);
-        hourglass += cards[card_numbers[0]].hourglass;
-        seen_cards[++number_of_seen_card] = card_numbers[0]; // add this card to seen
+        printf("%s\n", cards[card_number[0]].name);
+        Sleep(3000);
+        hourglass += cards[card_number[0]].hourglass;
+        seen_cards[++number_of_seen_card] = card_number[0]; // add this card to seen
     }
 }
 
@@ -151,7 +154,7 @@ void rotate_tile()
     int choice;
     int degree_choice;
     for (int i = 1; i <= 9; i++) {
-        printf("%d ");
+        printf("%d ", i);
         if (i % 3 == 0) {
             puts("");
         }
@@ -191,7 +194,7 @@ void switch_tiles()
 {
     int choice_1, choice_2;
     for (int i = 1; i <= 9; i++) {
-        printf("%d ");
+        printf("%d ", i);
         if (i % 3 == 0) {
             puts("");
         }
