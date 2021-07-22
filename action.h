@@ -191,7 +191,7 @@ void rotate_tile()
     }
 }
 
-void switch_tiles()//***
+void swap_tiles()//***
 {
     int choice_1, choice_2;
     for (int i = 1; i <= 9; i++) {
@@ -202,17 +202,32 @@ void switch_tiles()//***
     }
     printf("Choose 2 tiles to switch(<first> <second>): ");
     scanf("%d %d", &choice_1, &choice_2);
+    choice_1--;
+    choice_2--;
 
     int j, k;
-    struct tiles *current_1, *current_2;
-    for (current_1 = head, j = 0; j < 9; j++, current_1 = current_1->next) {
-        for (current_2 = head, k = 0; k < 9; k++, current_2 = current_2->next) {
-            if ((current_1->number == tile_numbers[choice_1]) && (current_2->number == tile_numbers[choice_2])) {
-                struct tiles *temp = current_1;
-                current_1 = current_2;
-                current_2 = temp;
+    struct tiles *previous_1 = head;
+    struct tiles *previous_2 = head;
+    struct tiles *current_1 = previous_1->next;
+    struct tiles *current_2 = previous_2->next;
+    for (j = 1; j < 9; j++) {
+        for (k = 1; k < 9; k++) {
+            if ((current_1->number == choice_1) && (current_2->number == choice_2)) {
+                previous_1->next = current_2;
+                previous_2->next = current_1;
+                struct tiles *temp = current_1->next;
+                current_1->next = current_2->next;
+                current_2->next = temp;
+                int temp_num = current_1->number;
+                current_1->number = current_2->number;
+                current_2->number = temp_num;
+                break;
             }
+            current_2 = current_2->next;
+            previous_2 = previous_2->next;
         }
+        current_1 = current_1->next;
+        previous_1 = previous_1->next;
     }
 }
 
