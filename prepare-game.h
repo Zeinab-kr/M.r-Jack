@@ -240,8 +240,9 @@ void print_map()
             }
             printf("%s", detective[i].name);
         }
+        puts("");
     }
-    puts("");
+    //puts("");
 
 
     struct tiles *current = head;
@@ -259,8 +260,9 @@ void print_map()
             }
             printf("%s", detective[i].name);
         }
+        puts("");
     }
-    puts("");
+    //puts("");
 }
 
 #endif // PREPARE-GAME_H_INCLUDED
