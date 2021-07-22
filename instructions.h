@@ -58,7 +58,7 @@ void action_menu(struct action_tokens action[], int action_side[], int choice[])
             printf("%d. %s\n", i, action[i-1].name[action_side[i-1]]);
         }
     }
-    printf("%d. Pause Game\n", i);
+    printf("%d. Pause Game\n\n", i);
 }
 
 #endif // INSTRUCTIONS_H_INCLUDED
