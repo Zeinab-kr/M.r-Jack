@@ -52,9 +52,9 @@ int main()
             seen_cards[0] = jack_char;
             printf("M.r Jack can see his character after 5 seconds\n");
             printf("Holmes must close his eyes\n");
-            Sleep(5000);
+            //Sleep(5000);
             printf("Your character is %s\n", cards[jack_char].name);
-            Sleep(3000);
+            //Sleep(3000);
             system("cls"); // clear console after 3 seconds so Holmes cannot see Jack's character
 //          -----------------------------------------------------------------------------------------------------
             // map
@@ -122,7 +122,7 @@ int main()
                     ++game_round;
                 }
 
-                int is_seen = ask();
+                /*int is_seen = ask();
                 Sleep(3000);
                 system("cls");
                 print_map();
@@ -130,7 +130,7 @@ int main()
                 // if m.r Jack hasn't been seen in this round...
                 if (!is_seen) {
                     ++hourglass; // ... add an hourglass
-                }
+                }*/
             }
         }
         // save hourglasses, map, card numbers, tile numbers, action sides

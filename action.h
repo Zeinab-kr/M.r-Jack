@@ -202,33 +202,61 @@ void swap_tiles()//***
     }
     printf("Choose 2 tiles to switch(<first> <second>): ");
     scanf("%d %d", &choice_1, &choice_2);
-    choice_1--;
-    choice_2--;
+    choice_1 -= 1;
+    choice_2 -= 1;
 
-    int j, k;
-    struct tiles *previous_1 = head;
-    struct tiles *previous_2 = head;
-    struct tiles *current_1 = previous_1->next;
-    struct tiles *current_2 = previous_2->next;
-    for (j = 1; j < 9; j++) {
-        for (k = 1; k < 9; k++) {
-            if ((current_1->number == choice_1) && (current_2->number == choice_2)) {
-                previous_1->next = current_2;
-                previous_2->next = current_1;
-                struct tiles *temp = current_1->next;
-                current_1->next = current_2->next;
-                current_2->next = temp;
-                int temp_num = current_1->number;
-                current_1->number = current_2->number;
-                current_2->number = temp_num;
-                break;
-            }
-            current_2 = current_2->next;
-            previous_2 = previous_2->next;
-        }
-        current_1 = current_1->next;
-        previous_1 = previous_1->next;
+    struct tiles *current = head;
+    struct tiles copy_of_map[9];
+    for (int i = 0; i < 9; i++, current = current->next) {
+        copy_of_map[i] = *current;
     }
+
+    for (int i = 0; i < 9; i++) {
+        if (copy_of_map[i].number == choice_1) {
+            for (int j = 0; j < 9; j++) {
+                if (copy_of_map[j].number == choice_2) {
+                    struct tiles temp = copy_of_map[i];
+                    copy_of_map[i] = copy_of_map[j];
+                    copy_of_map[j] = temp;
+
+                    copy_of_map[i].number = choice_1;
+                    copy_of_map[j].number = choice_2;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    current = head;
+    for (int i = 0; i < 9; i++, current = current->next) {
+        *current = copy_of_map[i];
+        if (i == 8) {
+            current->next = NULL;
+        }
+    }
+    /*struct tiles *previous_1 = NULL;
+    struct tiles *previous_2 = NULL;
+    struct tiles *current_1 = head;
+    struct tiles *current_2 = head;
+    for (; current_1->number == choice_1; previous_1 = current_1, current_1 = current_1->next);
+    for (; current_2->number == choice_2; previous_2 = current_2, current_2 = current_2->next);
+    if (current_1 == head) {
+        previous_2->next = current_1;
+    }
+    else if (current_2 == head) {
+        previous_1->next = current_2;
+    }
+    else {
+        previous_1->next = current_2;
+        previous_2->next = current_1;
+    }
+    struct tiles *temp = current_1->next;
+    current_1->next = current_2->next;
+    current_2->next = temp;
+
+    current_1->number = choice_2;
+    current_2->number = choice_1;*/
 }
 
 void joker()//***
