@@ -121,6 +121,28 @@ int main()
                             printf("M.r Jack pick the action: ");
                         }
                         scanf("%d", &action_choice[i]);
+                        if (action_choice[i] == 5) {
+                            pause_game_menu();
+                            int pause_choice;
+                            scanf("%d", &pause_choice);
+                            if (pause_choice == 1) {
+                                --i;
+                                continue;
+                            }
+                            if (pause_choice == 2) {
+                                if (save_game()) {
+                                    printf("Saved\n");
+                                }
+                                else {
+                                    printf("Could not save\n");
+                                }
+                                --i;
+                                continue;
+                            }
+                            if (pause_choice == 3) {
+                                end_game_menu();
+                            }
+                        }
                         (*do_action[action[action_choice[i]-1].number[action_side[action_choice[i]-1]]])();
                         system("cls");
                         print_map();
@@ -147,7 +169,7 @@ int main()
         }
         // load game
         else if (choice == 2) {
-            FILE *fptr = fopen("data.bin", "r"); // open file
+            FILE *fptr = fopen("data.bin", "rb"); // open file
 
             // load map
             struct tiles *current = head;
@@ -208,6 +230,28 @@ int main()
                             printf("Holmes pick the action: ");
                         }
                         scanf("%d", &action_choice[i]);
+                        if (action_choice[i] == 5) {
+                            pause_game_menu();
+                            int pause_choice;
+                            scanf("%d", &pause_choice);
+                            if (pause_choice == 1) {
+                                --i;
+                                continue;
+                            }
+                            if (pause_choice == 2) {
+                                if (save_game()) {
+                                    printf("Saved\n");
+                                }
+                                else {
+                                    printf("Could not save\n");
+                                }
+                                --i;
+                                continue;
+                            }
+                            if (pause_choice == 3) {
+                                end_game_menu();
+                            }
+                        }
                         (*do_action[action[action_choice[i]-1].number[action_side[action_choice[i]-1]]])();
                         system("cls");
                         print_map();
@@ -267,4 +311,46 @@ int main()
             printf("Invalid choice!\n\n");
         }
     }
+}
+
+bool save_game()
+{
+    FILE *fptr = fopen("data.bin", "wb+"); // open file
+    if (fptr == NULL) {
+        return false;
+    }
+
+            // save map
+            struct tiles *current = head;
+            for (int i = 0; i < 9; i++, current = current->next) {
+                fprintf(fptr, "%d %d %20s %p\n", current->number, current->wall, current->suspect, current->next);
+            }
+//          -----------------------------------------------------------------------------------------------------
+            // save the order of cards and tiles
+            for (int i = 0; i < 9; i++) {
+                fprintf(fptr, "%d ", card_numbers[i]);
+            }
+            fputs("");
+            for (int i = 0; i < 9; i++) {
+                fprintf(fptr, "%d ", tile_numbers[i]);
+            }
+            fputs("");
+//          -----------------------------------------------------------------------------------------------------
+            fprintf(fptr, "%d %d\n", game_round, hourglass); // save number of round and hourglsses
+//          -----------------------------------------------------------------------------------------------------
+            // cards that have been seen
+            for (int i = 0; i < 9; i++) {
+                fprintf(fptr, "%d ", seen_cards[i]);
+            }
+            fputs("");
+
+            fprintf(fptr, "%d\n", number_of_seen_card);
+//          -----------------------------------------------------------------------------------------------------
+            // save detectives' data
+            for (int i = 0; i < 3; i++) {
+                fprintf(fptr, "%d %d", detective[i].side, detective[i].block);
+            }
+            fputs("");
+//          -----------------------------------------------------------------------------------------------------
+            return true;
 }
