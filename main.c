@@ -18,10 +18,11 @@ int game_round = 1;
 
 // these headers needed to be included after defining global variables
 #include "prepare-game.h"
-#include "instructions.h"
 #include "shuffle.h"
 #include "action.h"
 #include "inquiry.h"
+#include "data.h"
+#include "instructions.h"
 
 // pointer to functions that do the actions
 void (*do_action[8])() = {holmes, suspects, watson, toby, rotate_tile, swap_tiles, rotate_tile, joker};
@@ -175,37 +176,38 @@ int main()
         else if (choice == 2) {
             FILE *fptr = fopen("data.bin", "rb"); // open file
 
+            int load_choice;
             load_game_menu(fptr);
+            scanf("%d", &load_choice);
+            fseek(fptr, (load_choice-1) * sizeof(struct game_data), SEEK_SET);
 
-            fscanf(fptr, "%d %d\n", &game_round, &hourglass); // load number of round and hourglasses
+            fscanf(fptr, "%d%d", &game_round, &hourglass); // load number of round and hourglasses
 //          -----------------------------------------------------------------------------------------------------
             // load map
             struct tiles *current = head;
             for (int i = 0; i < 9; i++, current = current->next) {
-                fscanf(fptr, "%d %d %20s %p\n", &current->number, &current->wall, current->suspect, current->next);
+                fscanf(fptr, "%d%d%20s%p", &current->number, &current->wall, current->suspect, current->next);
             }
 //          -----------------------------------------------------------------------------------------------------
             // load the order of cards and tiles
             for (int i = 0; i < 9; i++) {
-                fscanf(fptr, "%d ", &card_numbers[i]);
+                fscanf(fptr, "%d", &card_numbers[i]);
             }
             fgetchar(); // skip '\n'
             for (int i = 0; i < 9; i++) {
-                fscanf(fptr, "%d ", &tile_numbers[i]);
+                fscanf(fptr, "%d", &tile_numbers[i]);
             }
-            fgetchar();
 //          -----------------------------------------------------------------------------------------------------
             // cards that have been seen
             for (int i = 0; i < 9; i++) {
-                fscanf(fptr, "%d ", &seen_cards[i]);
+                fscanf(fptr, "%d", &seen_cards[i]);
             }
-            fgetchar();
 
-            fscanf(fptr, "%d\n", &number_of_seen_card);
+            fscanf(fptr, "%d", &number_of_seen_card);
 //          -----------------------------------------------------------------------------------------------------
             // load detectives' data
             for (int i = 0; i < 3; i++) {
-                fscanf(fptr, "%d %d\n", &detective[i].side, &detective[i].block);
+                fscanf(fptr, "%d%d", &detective[i].side, &detective[i].block);
             }
 //          -----------------------------------------------------------------------------------------------------
             // start the game
@@ -340,35 +342,32 @@ bool save_game()
         return false;
     }
 
-    fprintf(fptr, "%d %d\n", game_round, hourglass); // save number of round and hourglasses
+    fprintf(fptr, "%d%d", game_round, hourglass); // save number of round and hourglasses
 //  -----------------------------------------------------------------------------------------------------
     // save map
     struct tiles *current = head;
     for (int i = 0; i < 9; i++, current = current->next) {
-        fprintf(fptr, "%d %d %20s %p\n", current->number, current->wall, current->suspect, current->next);
+        fprintf(fptr, "%d%d%20s%p", current->number, current->wall, current->suspect, current->next);
     }
 //  -----------------------------------------------------------------------------------------------------
     // save the order of cards and tiles
     for (int i = 0; i < 9; i++) {
-        fprintf(fptr, "%d ", card_numbers[i]);
+        fprintf(fptr, "%d", card_numbers[i]);
     }
-    fputs("");
     for (int i = 0; i < 9; i++) {
-        fprintf(fptr, "%d ", tile_numbers[i]);
+        fprintf(fptr, "%d", tile_numbers[i]);
     }
-    fputs("");
 //  -----------------------------------------------------------------------------------------------------
     // cards that have been seen
     for (int i = 0; i < 9; i++) {
         fprintf(fptr, "%d ", seen_cards[i]);
     }
-    fputs("");
 
-    fprintf(fptr, "%d\n", number_of_seen_card);
+    fprintf(fptr, "%d", number_of_seen_card);
 //  -----------------------------------------------------------------------------------------------------
     // save detectives' data
     for (int i = 0; i < 3; i++) {
-        fprintf(fptr, "%d %d\n", detective[i].side, detective[i].block);
+        fprintf(fptr, "%d%d", detective[i].side, detective[i].block);
     }
 //  -----------------------------------------------------------------------------------------------------
     return true;

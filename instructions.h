@@ -25,7 +25,15 @@ void game_menu()
 
 void load_game_menu(FILE *fptr)
 {
-
+    int i = -1;
+    int g_round, glasses;
+    while(!feof(fptr)) {
+        fseek(fptr, (++i) * sizeof(struct game_data), SEEK_SET);
+        fscanf("%d%d", &g_round, &glasses);
+        printf("%d) round: %d | hourglasses: %d\n", i+1, g_round, glasses);
+    }
+    printf("Choose the game: ");
+    rewind(fptr);
 }
 
 void pause_game_menu()
