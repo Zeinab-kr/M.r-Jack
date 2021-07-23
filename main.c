@@ -26,6 +26,9 @@ int game_round = 1;
 // pointer to functions that do the actions
 void (*do_action[8])() = {holmes, suspects, watson, toby, rotate_tile, swap_tiles, rotate_tile, joker};
 
+// prototypes
+bool save_game();
+
 int main()
 {
     int choice;
@@ -155,7 +158,7 @@ int main()
                 system("cls");
                 print_map();
 
-                // if m.r Jack hasn't been seen in this round...
+                // if m.r Jack has not been seen in this round...
                 if (!is_seen) {
                     ++hourglass; // ... add an hourglass
                 }
@@ -167,10 +170,15 @@ int main()
                 printf("HOLMES WON!!!\n");
             }
         }
+//      ----------------------------------------------------------------------------------------------------------------------------
         // load game
         else if (choice == 2) {
             FILE *fptr = fopen("data.bin", "rb"); // open file
 
+            load_game_menu(fptr);
+
+            fscanf(fptr, "%d %d\n", &game_round, &hourglass); // load number of round and hourglasses
+//          -----------------------------------------------------------------------------------------------------
             // load map
             struct tiles *current = head;
             for (int i = 0; i < 9; i++, current = current->next) {
@@ -187,8 +195,6 @@ int main()
             }
             fgetchar();
 //          -----------------------------------------------------------------------------------------------------
-            fscanf(fptr, "%d %d\n", &game_round, &hourglass); // load number of round and hourglsses
-//          -----------------------------------------------------------------------------------------------------
             // cards that have been seen
             for (int i = 0; i < 9; i++) {
                 fscanf(fptr, "%d ", &seen_cards[i]);
@@ -199,9 +205,8 @@ int main()
 //          -----------------------------------------------------------------------------------------------------
             // load detectives' data
             for (int i = 0; i < 3; i++) {
-                fscanf(fptr, "%d %d", &detective[i].side, &detective[i].block);
+                fscanf(fptr, "%d %d\n", &detective[i].side, &detective[i].block);
             }
-            fgetchar();
 //          -----------------------------------------------------------------------------------------------------
             // start the game
             int action_side[4];
@@ -250,6 +255,20 @@ int main()
                             }
                             if (pause_choice == 3) {
                                 end_game_menu();
+                                int end_choice;
+                                scanf("%d", &end_choice);
+                                if (end_choice == 1) {
+                                    if (save_game()) {
+                                        printf("Saved\n");
+                                    }
+                                    else {
+                                        printf("Could not save\n");
+                                    }
+                                    return 0;
+                                }
+                                if (end_choice == 2) {
+                                    return 0;
+                                }
                             }
                         }
                         (*do_action[action[action_choice[i]-1].number[action_side[action_choice[i]-1]]])();
@@ -292,7 +311,7 @@ int main()
                 system("cls");
                 print_map();
 
-                // if m.r Jack hasn't been seen in this round...
+                // if m.r Jack has not been seen in this round...
                 if (!is_seen) {
                     ++hourglass; // ... add an hourglass
                 }
@@ -304,6 +323,7 @@ int main()
                 printf("HOLMES WON!!!\n");
             }
         }
+//      ----------------------------------------------------------------------------------------------------------------------------
         else if (choice == 3) {
             break;
         }
@@ -320,37 +340,36 @@ bool save_game()
         return false;
     }
 
-            // save map
-            struct tiles *current = head;
-            for (int i = 0; i < 9; i++, current = current->next) {
-                fprintf(fptr, "%d %d %20s %p\n", current->number, current->wall, current->suspect, current->next);
-            }
-//          -----------------------------------------------------------------------------------------------------
-            // save the order of cards and tiles
-            for (int i = 0; i < 9; i++) {
-                fprintf(fptr, "%d ", card_numbers[i]);
-            }
-            fputs("");
-            for (int i = 0; i < 9; i++) {
-                fprintf(fptr, "%d ", tile_numbers[i]);
-            }
-            fputs("");
-//          -----------------------------------------------------------------------------------------------------
-            fprintf(fptr, "%d %d\n", game_round, hourglass); // save number of round and hourglsses
-//          -----------------------------------------------------------------------------------------------------
-            // cards that have been seen
-            for (int i = 0; i < 9; i++) {
-                fprintf(fptr, "%d ", seen_cards[i]);
-            }
-            fputs("");
+    fprintf(fptr, "%d %d\n", game_round, hourglass); // save number of round and hourglasses
+//  -----------------------------------------------------------------------------------------------------
+    // save map
+    struct tiles *current = head;
+    for (int i = 0; i < 9; i++, current = current->next) {
+        fprintf(fptr, "%d %d %20s %p\n", current->number, current->wall, current->suspect, current->next);
+    }
+//  -----------------------------------------------------------------------------------------------------
+    // save the order of cards and tiles
+    for (int i = 0; i < 9; i++) {
+        fprintf(fptr, "%d ", card_numbers[i]);
+    }
+    fputs("");
+    for (int i = 0; i < 9; i++) {
+        fprintf(fptr, "%d ", tile_numbers[i]);
+    }
+    fputs("");
+//  -----------------------------------------------------------------------------------------------------
+    // cards that have been seen
+    for (int i = 0; i < 9; i++) {
+        fprintf(fptr, "%d ", seen_cards[i]);
+    }
+    fputs("");
 
-            fprintf(fptr, "%d\n", number_of_seen_card);
-//          -----------------------------------------------------------------------------------------------------
-            // save detectives' data
-            for (int i = 0; i < 3; i++) {
-                fprintf(fptr, "%d %d", detective[i].side, detective[i].block);
-            }
-            fputs("");
-//          -----------------------------------------------------------------------------------------------------
-            return true;
+    fprintf(fptr, "%d\n", number_of_seen_card);
+//  -----------------------------------------------------------------------------------------------------
+    // save detectives' data
+    for (int i = 0; i < 3; i++) {
+        fprintf(fptr, "%d %d\n", detective[i].side, detective[i].block);
+    }
+//  -----------------------------------------------------------------------------------------------------
+    return true;
 }

@@ -23,7 +23,7 @@ void game_menu()
     printf("Enter your choice: ");
 }
 
-void load_game_menu()
+void load_game_menu(FILE *fptr)
 {
 
 }
