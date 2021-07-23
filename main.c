@@ -38,15 +38,17 @@ int main()
         scanf("%d", &choice);
         puts("");
 
+        // define game
+        define_cards(); // define characters and their hourglass(es)
+        define_detectives();
+        define_action_tokens();
+
         if (choice == 1) {
             int char_choice;
 
-            // define game
-            define_cards(); // define characters and their hourglass(es)
-            define_detectives();
-            define_action_tokens();
+            // shuffle cards and tiles
             shuffle_cards(card_numbers);
-            shuffle_cards(tile_numbers); // shuffle tiles
+            shuffle_cards(tile_numbers);
 //          -----------------------------------------------------------------------------------------------------
             // M.r Jack's character
             int jack_char = card_numbers[0];
@@ -143,9 +145,120 @@ int main()
                 printf("HOLMES WON!!!\n");
             }
         }
-        // save hourglasses, map, card numbers, tile numbers, action sides
+        // load game
         else if (choice == 2) {
-            ;
+            FILE *fptr = fopen("data.bin", "r"); // open file
+
+            // load map
+            struct tiles *current = head;
+            for (int i = 0; i < 9; i++, current = current->next) {
+                fscanf(fptr, "%d %d %20s %p\n", &current->number, &current->wall, current->suspect, current->next);
+            }
+//          -----------------------------------------------------------------------------------------------------
+            // load the order of cards and tiles
+            for (int i = 0; i < 9; i++) {
+                fscanf(fptr, "%d ", &card_numbers[i]);
+            }
+            fgetchar(); // skip '\n'
+            for (int i = 0; i < 9; i++) {
+                fscanf(fptr, "%d ", &tile_numbers[i]);
+            }
+            fgetchar();
+//          -----------------------------------------------------------------------------------------------------
+            fscanf(fptr, "%d %d\n", &game_round, &hourglass); // load number of round and hourglsses
+//          -----------------------------------------------------------------------------------------------------
+            // cards that have been seen
+            for (int i = 0; i < 9; i++) {
+                fscanf(fptr, "%d ", &seen_cards[i]);
+            }
+            fgetchar();
+
+            fscanf(fptr, "%d\n", &number_of_seen_card);
+//          -----------------------------------------------------------------------------------------------------
+            // load detectives' data
+            for (int i = 0; i < 3; i++) {
+                fscanf(fptr, "%d %d", &detective[i].side, &detective[i].block);
+            }
+            fgetchar();
+//          -----------------------------------------------------------------------------------------------------
+            // start the game
+            int action_side[4];
+            while ((hourglass < 6) || (game_round < 8) || (check_map == true)) {
+                // check if Holmes has found m.r Jack
+                check_map = check();
+
+                if (game_round % 2 == 1) {
+                    // Holmes starts the round
+                    int action_choice[4] = {0};
+                    // actions
+                    flip_action_tokens(action_side); // randomly choose actions
+
+                    for (int i = 0; i < 4; i++) {
+                        action_menu(action, action_side, action_choice);
+                        if (i == 0) {
+                            printf("Holmes pick an action: ");
+                        }
+                        if (i == 1) {
+                            printf("M.r Jack pick an action: ");
+                        }
+                        if (i == 2) {
+                            printf("Pick another one: ");
+                        }
+                        if (i == 3) {
+                            printf("Holmes pick the action: ");
+                        }
+                        scanf("%d", &action_choice[i]);
+                        (*do_action[action[action_choice[i]-1].number[action_side[action_choice[i]-1]]])();
+                        system("cls");
+                        print_map();
+                    }
+                    ++game_round;
+                }
+                else {
+                    // M.r Jack starts the round
+                    int action_choice[4] = {0};
+                    // actions
+                    for (int i = 0; i < 4; i++) {
+                        action_side[i] = 1 - action_side[i]; // the other side of the tokens
+                    }
+                    for (int i = 0; i < 4; i++) {
+                        action_menu(action, action_side, action_choice);
+                        if (i == 0) {
+                            printf("M.r Jack pick an action: ");
+                        }
+                        if (i == 1) {
+                            printf("Holmes pick an action: ");
+                        }
+                        if (i == 2) {
+                            printf("Pick another one: ");
+                        }
+                        if (i == 3) {
+                            printf("M.r Jack pick the action: ");
+                        }
+                        scanf("%d", &action_choice[i]);
+                        (*do_action[action[action_choice[i]-1].number[action_side[action_choice[i]-1]]])();
+                        system("cls");
+                        print_map();
+                    }
+                    ++game_round;
+                }
+
+                bool is_seen = ask();
+                Sleep(3000);
+                system("cls");
+                print_map();
+
+                // if m.r Jack hasn't been seen in this round...
+                if (!is_seen) {
+                    ++hourglass; // ... add an hourglass
+                }
+            }
+            if (game_round == 8 || hourglass >= 6) {
+                printf("M.R JACK WON!!!\n");
+            }
+            if (check_map) {
+                printf("HOLMES WON!!!\n");
+            }
         }
         else if (choice == 3) {
             break;
