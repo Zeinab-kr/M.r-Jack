@@ -3,124 +3,96 @@
 
 bool ask()
 {
-    struct tiles *current = NULL;
-    char seen_characters[9][20];
+    struct tiles *current = head;
+    struct tiles copy_of_map[9];
+    for (int i = 0; i < 9; i++, current = current->next) {
+        copy_of_map[i] = *current;
+    }
+    char *seen_characters[9];
+    for (int i = 0; i < 9; i++) {
+        seen_characters[i] = (char *)malloc(20 * sizeof(char));
+    }
     int num = -1;
+    int k;
     for (int i = 0; i < 3; i++) {
         if (detective[i].side == UP) {
             if (detective[i].block == 1) {
-                current = head;
+                k = 0;
             }
             if (detective[i].block == 2) {
-                current = head->next;
+                k = 1;
             }
             if (detective[i].block == 3) {
-                current = head->next->next;
+                k = 2;
             }
             for (int j = 0; j < 3;) {
-                if (current->wall != UP) {
-                    strcpy(seen_characters[++num], current->suspect);
+                if (copy_of_map[k].wall != UP) {
+                    strcpy(seen_characters[++num], copy_of_map[k].suspect);
                 } else {break;}
-                if (current->wall != DOWN) {
-                    current = current->next->next->next;
+                if (copy_of_map[k].wall != DOWN) {
+                    k += 3;
                     j++;
                 } else {break;}
             }
         }
         if (detective[i].side == DOWN) {
-            struct tiles *previous = NULL;
-            struct tiles *next = NULL;
             if (detective[i].block == 1) {
-                current = head;
-                previous = head;
+                k = 6;
             }
             if (detective[i].block == 2) {
-                current = head->next;
-                previous = head->next;
+                k = 7;
             }
             if (detective[i].block == 3) {
-                current = head->next->next;
-                previous = head->next->next;
-            }
-            for (int k = 0; k < 3; k++) {
-                previous = previous->next;
-            }
-            for (int k = 0; k < 6; k++) {
-                current = current->next;
+                k = 8;
             }
             for (int j = 0; j < 3;) {
-                if (current->wall != DOWN) {
-                    strcpy(seen_characters[++num], current->suspect);
+                if (copy_of_map[k].wall != DOWN) {
+                    strcpy(seen_characters[++num], copy_of_map[k].suspect);
                 } else {break;}
-                if (current->wall != UP) {
+                if (copy_of_map[k].wall != UP) {
                     // move backwards
-                    next = current->next->next->next;
-                    current->next->next->next = previous;
-                    previous = current;
-                    current = next;
+                    k -= 3;
                     j++;
                 } else {break;}
             }
         }
         if (detective[i].side == RIGHT) {
-            struct tiles *previous = NULL;
-            struct tiles *next = NULL;
             if (detective[i].block == 1) {
-                current = head->next->next;
-                previous = head->next;
+                k = 2;
             }
             if (detective[i].block == 2) {
-                current = head->next->next;
-                previous = head->next;
-                for (int k = 0; k < 3; k++) {
-                    current = current->next;
-                    previous = previous->next;
-                }
+                k = 5;
             }
             if (detective[i].block == 3) {
-                current = head->next->next;
-                previous = head->next;
-                for (int k = 0; k < 6; k++) {
-                    current = current->next;
-                    previous = previous->next;
-                }
+                k = 7;
             }
             for (int j = 0; j < 3;) {
-                if (current->wall != RIGHT) {
-                    strcpy(seen_characters[++num], current->suspect);
+                if (copy_of_map[k].wall != RIGHT) {
+                    strcpy(seen_characters[++num], copy_of_map[k].suspect);
                 } else {break;}
-                if (current->wall != LEFT) {
+                if (copy_of_map[k].wall != LEFT) {
                     // move backwards
-                    next = current->next;
-                    current->next = previous;
-                    previous = current;
-                    current = next;
+                    k--;
                     j++;
                 } else {break;}
             }
         }
         if (detective[i].side == LEFT) {
             if (detective[i].block == 1) {
-                current = head;
+                k = 0;
             }
             if (detective[i].block == 2) {
-                current = head;
-                for (int k = 0; k < 3; k++) {
-                    current = current->next;
-                }
+                k = 3;
             }
             if (detective[i].block == 3) {
-                current = head;
-                for (int k = 0; k < 6; k++) {
-                    current = current->next;
-                }
+                k = 6;
             }
             for (int j = 0; j < 3;) {
-                if (current->wall != LEFT) {
-                    strcpy(seen_characters[++num], current->suspect);
+                if (copy_of_map[k].wall != LEFT) {
+                    strcpy(seen_characters[++num], copy_of_map[k].suspect);
                 } else {break;}
-                if (current->wall != RIGHT) {
-                    current = current->next;
+                if (copy_of_map[k].wall != RIGHT) {
+                    k++;
                     j++;
                 } else {break;}
             }
@@ -157,12 +129,27 @@ bool ask()
                 }
             }
             if (flag_2 == 0) {
-                strcmp(current->suspect, " ");
+                strcpy(current->suspect, " ");
             }
             current = current->next;
         }
     }
     return flag;
+}
+
+bool check()
+{
+    struct tiles *current = head;
+    int num = 0;
+    for (int i = 0; i < 9; i++, current = current->next) {
+        if (strcmp(current->suspect, " ") != 0) {
+            num++;
+        }
+    }
+    if (num == 1) {
+        return true;
+    }
+    return false;
 }
 
 #endif // INQUIRY_H_INCLUDED

@@ -29,6 +29,7 @@ void (*do_action[8])() = {holmes, suspects, watson, toby, rotate_tile, swap_tile
 int main()
 {
     int choice;
+    bool check_map = false;
 
     intro();
 
@@ -52,9 +53,9 @@ int main()
             seen_cards[0] = jack_char;
             printf("M.r Jack can see his character after 5 seconds\n");
             printf("Holmes must close his eyes\n");
-            //Sleep(5000);
+            Sleep(5000);
             printf("Your character is %s\n", cards[jack_char].name);
-            //Sleep(3000);
+            Sleep(3000);
             system("cls"); // clear console after 3 seconds so Holmes cannot see Jack's character
 //          -----------------------------------------------------------------------------------------------------
             // map
@@ -65,7 +66,10 @@ int main()
 //          -----------------------------------------------------------------------------------------------------
             // start the game
             int action_side[4];
-            while ((hourglass < 6) || (game_round < 8)) {
+            while ((hourglass < 6) || (game_round < 8) || (check_map == true)) {
+                // check if Holmes has found m.r Jack
+                check_map = check();
+
                 if (game_round % 2 == 1) {
                     // Holmes starts the round
                     int action_choice[4] = {0};
@@ -122,7 +126,7 @@ int main()
                     ++game_round;
                 }
 
-                /*int is_seen = ask();
+                bool is_seen = ask();
                 Sleep(3000);
                 system("cls");
                 print_map();
@@ -130,7 +134,13 @@ int main()
                 // if m.r Jack hasn't been seen in this round...
                 if (!is_seen) {
                     ++hourglass; // ... add an hourglass
-                }*/
+                }
+            }
+            if (game_round == 8 || hourglass >= 6) {
+                printf("M.R JACK WON!!!\n");
+            }
+            if (check_map) {
+                printf("HOLMES WON!!!\n");
             }
         }
         // save hourglasses, map, card numbers, tile numbers, action sides

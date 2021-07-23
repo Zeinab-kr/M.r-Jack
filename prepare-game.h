@@ -151,7 +151,7 @@ void print_row(struct tiles *first, int row)
     int flag = 0;
     for (i = 0; i < 3; i++) {
         if (detective[i].side == LEFT && detective[i].block == row) {
-            printf("%-10s", detective[i].name);
+            printf("%-9s ", detective[i].name);
             flag = 1;
         }
     }
@@ -193,7 +193,7 @@ void print_row(struct tiles *first, int row)
     flag = 0;
     for (i = 0; i < 3; i++) {
         if (detective[i].side == RIGHT && detective[i].block == row) {
-            printf("%s", detective[i].name);
+            printf("%s ", detective[i].name);
             flag = 1;
         }
     }
