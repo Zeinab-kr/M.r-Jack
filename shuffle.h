@@ -15,6 +15,21 @@ void shuffle_cards(int numbers[])
     }
 }
 
+void shuffle_tiles(int numbers[])
+{
+    int j = 9;
+    for (int i = 0; i < 9; i++) {
+        numbers[i] = --j;
+    }
+    srand(time(NULL));
+    for (int i = 0; i < 9; i++) {
+        int randomIndex = rand() % 9;
+        int temp = numbers[i];
+        numbers[i] = numbers[randomIndex];
+        numbers[randomIndex] = temp;
+    }
+}
+
 void rotation(int wall[])
 {
     srand(time(NULL));

@@ -52,7 +52,7 @@ int main()
 
             // shuffle cards and tiles
             shuffle_cards(card_numbers);
-            shuffle_cards(tile_numbers);
+            shuffle_tiles(tile_numbers);
 //          -----------------------------------------------------------------------------------------------------
             // M.r Jack's character
             int jack_char = card_numbers[0];
@@ -72,9 +72,9 @@ int main()
 //          -----------------------------------------------------------------------------------------------------
             // start the game
             int action_side[4];
-            while ((hourglass < 6) || (game_round < 8) || (check_map == true)) {
-                // check if Holmes has found m.r Jack
-                check_map = check();
+            while ((hourglass < 6) && (game_round < 8) && (check_map == false)) {
+
+                printf("Round %d\n\n", game_round);
 
                 if (game_round % 2 == 1) {
                     // Holmes starts the round
@@ -97,6 +97,42 @@ int main()
                             printf("Holmes pick the action: ");
                         }
                         scanf("%d", &action_choice[i]);
+                        if (action_choice[i] == 5) {
+                            pause_game_menu();
+                            int pause_choice;
+                            scanf("%d", &pause_choice);
+                            if (pause_choice == 1) {
+                                --i;
+                                continue;
+                            }
+                            if (pause_choice == 2) {
+                                if (save_game()) {
+                                    printf("Saved\n");
+                                }
+                                else {
+                                    printf("Could not save\n");
+                                }
+                                --i;
+                                continue;
+                            }
+                            if (pause_choice == 3) {
+                                end_game_menu();
+                                int end_choice;
+                                scanf("%d", &end_choice);
+                                if (end_choice == 1) {
+                                    if (save_game()) {
+                                        printf("Saved\n");
+                                    }
+                                    else {
+                                        printf("Could not save\n");
+                                    }
+                                    return 0;
+                                }
+                                if (end_choice == 2) {
+                                    return 0;
+                                }
+                            }
+                        }
                         (*do_action[action[action_choice[i]-1].number[action_side[action_choice[i]-1]]])();
                         system("cls");
                         print_map();
@@ -145,6 +181,20 @@ int main()
                             }
                             if (pause_choice == 3) {
                                 end_game_menu();
+                                int end_choice;
+                                scanf("%d", &end_choice);
+                                if (end_choice == 1) {
+                                    if (save_game()) {
+                                        printf("Saved\n");
+                                    }
+                                    else {
+                                        printf("Could not save\n");
+                                    }
+                                    return 0;
+                                }
+                                if (end_choice == 2) {
+                                    return 0;
+                                }
                             }
                         }
                         (*do_action[action[action_choice[i]-1].number[action_side[action_choice[i]-1]]])();
@@ -163,6 +213,10 @@ int main()
                 if (!is_seen) {
                     ++hourglass; // ... add an hourglass
                 }
+
+                // check if Holmes has found m.r Jack
+                check_map = check();
+
             }
             if (game_round == 8 || hourglass >= 6) {
                 printf("M.R JACK WON!!!\n");
@@ -212,9 +266,9 @@ int main()
 //          -----------------------------------------------------------------------------------------------------
             // start the game
             int action_side[4];
-            while ((hourglass < 6) || (game_round < 8) || (check_map == true)) {
-                // check if Holmes has found m.r Jack
-                check_map = check();
+            while ((hourglass < 6) && (game_round < 8) && (check_map == false)) {
+
+                printf("Round %d\n\n", game_round);
 
                 if (game_round % 2 == 1) {
                     // Holmes starts the round
@@ -317,6 +371,10 @@ int main()
                 if (!is_seen) {
                     ++hourglass; // ... add an hourglass
                 }
+
+                // check if Holmes has found m.r Jack
+                check_map = check();
+
             }
             if (game_round == 8 || hourglass >= 6) {
                 printf("M.R JACK WON!!!\n");

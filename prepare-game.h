@@ -230,10 +230,10 @@ void print_row(struct tiles *first, int row)
 
 void print_map()
 {
-    for (int i = 0; i < 10; i++) {
-        printf(" ");
-    }
     for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 10; j++) {
+            printf(" ");
+        }
         if (detective[i].side == UP) {
             for (int j = 0; j < (int)floor((float)((21-strlen(detective[i].name))/2)) + (detective[i].block-1)*21; j++) {
                 printf(" ");
@@ -242,7 +242,6 @@ void print_map()
         }
         puts("");
     }
-    //puts("");
 
 
     struct tiles *current = head;
@@ -250,10 +249,10 @@ void print_map()
         print_row(current, i);
     }
 
-    for (int i = 0; i < 10; i++) {
-        printf(" ");
-    }
     for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 10; j++) {
+            printf(" ");
+        }
         if (detective[i].side == DOWN) {
             for (int j = 0; j < (int)floor((float)((21-strlen(detective[i].name))/2)) + (detective[i].block-1)*21; j++) {
                 printf(" ");
@@ -262,7 +261,6 @@ void print_map()
         }
         puts("");
     }
-    //puts("");
 }
 
 #endif // PREPARE-GAME_H_INCLUDED

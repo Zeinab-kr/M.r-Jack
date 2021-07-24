@@ -266,7 +266,7 @@ void joker()//***
         printf("%d. %s\n", i+1, detective[i].name);
     }
     if (game_round % 2 == 0) {
-        printf("4. None");
+        printf("4. None\n");
     }
     printf("Which detective do you want to move? ");
     scanf("%d", &char_choice);
